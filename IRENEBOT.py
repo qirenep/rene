@@ -1,53 +1,29 @@
 import asyncio
 import discord
-import time
-import datetime
-import os
 import requests
 import urllib
 import bs4
-import client
 import re
-import self
-import wolframalpha
-import ctx
 import random
-import subprocess
 import math
-import argparse, sys, operator
+import sys, operator
 import pandas as pd
 import urllib.request
 import urllib.parse
-import openpyxl
 import youtube_dl
 import functools
 import itertools
-import speech_recognition as sr
-import discord
-import traceback
-from flask_cors import CORS
 from classes.converters import Platform, Battletag
-from aiohttp import web
-from functools import partial
+import aiohttp
 from async_timeout import timeout
 from discord.ext import commands
-from pandas import DataFrame
 from openpyxl import load_workbook
-from math import sqrt
-from discord import Member
-from random import sample
-from flask import Flask, render_template, request, jsonify, Response
 from urllib.request import urlopen, Request
-from wait_for import wait_for
 from bs4 import BeautifulSoup
-from discord.ext import commands
-import time
-import os
 from utilsmy.http import Fetch, PlayerNotFound
 from utilsmy.embed import Embeds, NoCompetitiveStats
-from termcolor import colored
 
-token = "RqxZEQfh4dqVzyj6Q_9C2Pky5adw8NiU"
+token = "4XZ-iDz7DKPSpqajCneYFAM3hZAPgDn3"
 
 def splitmessage(s):
     words = []
@@ -126,9 +102,8 @@ class Main(commands.Cog):
         avatar = "{0} here is {1}'s avatar"
 
         u = member.avatar_url
-        url = u
         embed = discord.Embed(description=avatar.format(author, mention), colour=discord.Colour.blue())
-        embed.set_image(url=u)
+        embed.set_image(u)
         await ctx.send(embed=embed)
 
     @commands.command(name='배그솔로')
@@ -273,7 +248,6 @@ class Main(commands.Cog):
         duoRecord1 = duoCenter1.find("div", {"class": "overview"})
         duoRecord = duoRecord1.text.strip()  # ----기록이없습니다 문구----
         print(duoRecord)
-        channel = ctx.channel
         embed = discord.Embed(
             title='배그스쿼드 정보',
             description='배그스쿼드 정보입니다.',
@@ -914,51 +888,7 @@ class Statistics(commands.Cog):
             except Exception as ex:
                 embed = fmt.exception(ex)
                 await ctx.send(embed=embed)
-                
-class ErrorHandler(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error, bypass=False):
-
-        if (
-            hasattr(ctx.command, "on_error")
-            or (ctx.command and hasattr(ctx.cog, f"_{ctx.command.cog_name}__error"))
-            and not bypass
-        ):
-            # do nothing if a command has its own error handler
-            return
-
-        if isinstance(error, commands.CommandNotFound):
-            return
-
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("You are missing a required argument: `{arg}`".format(
-                arg=error.param.name))
-
-        elif isinstance(error, commands.BadArgument):
-            await ctx.send("You are using a bad argument.")
-
-        elif isinstance(error, commands.MissingPermissions):
-            await ctx.send("You don't have enough permissions.")
-
-        elif isinstance(error, commands.CommandOnCooldown):
-            await ctx.send("You can't use `{command}` command for `{seconds}` seconds.".format(
-                command=ctx.command.name, seconds=round(error.retry_after, 2)
-            ))
-
-        elif isinstance(error, commands.NotOwner):
-            await ctx.send("It seems you do not own this bot.")
-
-        elif hasattr(error, "original") and isinstance(
-                error.original, discord.HTTPException):
-            return
-
-        elif isinstance(error, JSONDecodeError):
-            await ctx.send("An API error occured. Please be patient and try again.")
-
-                    
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
@@ -1439,7 +1369,6 @@ class Music(commands.Cog):
 
 
 bot = commands.Bot('r' and 'R')
-bot.add_cog(ErrorHandler(bot))
 bot.add_cog(Music(bot))
 bot.add_cog(Main(bot))
 bot.add_cog(Statistics(bot))
@@ -1448,4 +1377,4 @@ bot.add_cog(Statistics(bot))
 async def on_ready():
     print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))
     await bot.change_presence(activity=discord.Game(name="연애", type=0))
-bot.run('NjEyOTMxMTg4ODU1OTMwODkw.XWkUEA.UzWv6LmOm1AkurReerPzJrbMHio')
+bot.run('NjEyOTMxMTg4ODU1OTMwODkw.XkrP_w.GV5ar92tN9u_VV2ZnOGjWKwGC_8')
