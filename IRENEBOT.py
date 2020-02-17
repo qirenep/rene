@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 from utilsmy.http import Fetch, PlayerNotFound
 from utilsmy.embed import Embeds, NoCompetitiveStats
 
-token = "4XZ-iDz7DKPSpqajCneYFAM3hZAPgDn3"
+token = "YOUR-TOKEN"
 
 def splitmessage(s):
     words = []
@@ -1377,4 +1377,4 @@ bot.add_cog(Statistics(bot))
 async def on_ready():
     print('Logged in as:\n{0.user.name}\n{0.user.id}'.format(bot))
     await bot.change_presence(activity=discord.Game(name="연애", type=0))
-bot.run('NjEyOTMxMTg4ODU1OTMwODkw.XkrP_w.GV5ar92tN9u_VV2ZnOGjWKwGC_8')
+bot.run('KEY')
