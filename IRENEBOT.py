@@ -602,7 +602,7 @@ class Main(commands.Cog):
             three_gram_word_list.append(word3)
 
         print('\n알쏭달쏭, 하지만 찾고 싶은 노래의 문장!: %s\n'%base)
-        await message.author.send('\n알쏭달쏭, 하지만 찾고 싶은 노래의 문장!: %s\n'%base)
+        await ctx.author.send('\n알쏭달쏭, 하지만 찾고 싶은 노래의 문장!: %s\n'%base)
 
         # 3-gram
         three_max_index = three_gram_score_list.index(max(three_gram_score_list)) 
@@ -611,9 +611,9 @@ class Main(commands.Cog):
         tmp_sentence_list = []
         tmp_track_list = []
 
-        await message.author.send('\n분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
-        await message.author.send('분석 결과 가장 유사한 곡은 %s의 %s'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
-        await message.author.send('해당 곡의 전체 가사를 보여드릴게요\n\n')
+        await ctx.author.send('\n분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
+        await ctx.author.send('분석 결과 가장 유사한 곡은 %s의 %s'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
+        await ctx.author.send('해당 곡의 전체 가사를 보여드릴게요\n\n')
         print('\n분석 결과 가장 유사한 문장: %s'%sentence_list[three_max_index])
         print('분석 결과 가장 유사한 곡은 %s의 %s'%(track_artist_info_dict[three_max_track_id], track_song_info_dict[three_max_track_id]))
 
@@ -653,14 +653,12 @@ class Main(commands.Cog):
                     tmp_track_check_list.append(t[4])
 
             if len(result) > 0:
-                await message.author.send('\n유사한 다른 곡들도 확인합니다.\n')
+                await ctx.author.send('\n유사한 다른 곡들도 확인합니다.\n')
                 print('\n유사한 다른 곡들도 확인합니다.\n')
                 for r in result:
-                    await message.author.send('%s의 %s / 유사한 문장: %s' % (r[0], r[1], r[3]))
+                    await ctx.author.send('%s의 %s / 유사한 문장: %s' % (r[0], r[1], r[3]))
         except KeyError:
             sys.exit(1)
-
-    
 
 class Statistics(commands.Cog):
     def __init__(self, bot):
