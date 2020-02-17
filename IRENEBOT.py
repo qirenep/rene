@@ -136,71 +136,20 @@ class Main(commands.Cog):
         url = "https://dak.gg/profile/"+enc_location
         html = urllib.request.urlopen(url)
         bsObj = bs4.BeautifulSoup(html, "html.parser")
-        solo1 = bsObj.find("div", {"class": "overview"})
-        solo2 = solo1.text
-        solo3 = solo2.strip()
-        channel = ctx.channel
+        duoCenter1 = bsObj.find("div", {"class": "overview"})
+        duoRecord1 = duoCenter1.text
+        duoRecord = duoRecord1.strip()
         embed = discord.Embed(
             title='배그솔로 정보',
             description='배그솔로 정보입니다.',
             colour=discord.Colour.green())
-        if solo3 == "No record":
+        if duoRecord == "No record":
             print("솔로 경기가 없습니다.")
             embed.add_field(name='배그를 한판이라도 해주세요', value='솔로 경기 전적이 없습니다..', inline=False)
             await ctx.send(embed=embed)
 
         else:
-            solo4 = solo1.find("span", {"class": "value"})
-            soloratting = solo4.text  # -------솔로레이팅---------
-            solorank0_1 = solo1.find("div", {"class": "grade-info"})
-            solorank0_2 = solorank0_1.text
-            solorank = solorank0_2.strip()  # -------랭크(그마,브론즈)---------
-
-            print("레이팅 : " + soloratting)
-            print("등급 : " + solorank)
-            print("")
-            embed.add_field(name='레이팅', value=soloratting, inline=False)
-            embed.add_field(name='등급', value=solorank, inline=False)
-
-            soloKD1 = bsObj.find("div", {"class": "kd stats-item stats-top-graph"})
-            soloKD2 = soloKD1.find("p", {"class": "value"})
-            soloKD3 = soloKD2.text
-            soloKD = soloKD3.strip()  # -------킬뎃(2.0---------
-            soloSky1 = soloKD1.find("span", {"class": "top"})
-            soloSky2 = soloSky1.text  # -------상위10.24%---------
-
-            print("킬뎃 : " + soloKD)
-            print("킬뎃상위 : " + soloSky2)
-            print("")
-            embed.add_field(name='킬뎃,킬뎃상위', value=soloKD+" "+soloSky2, inline=False)
-            #embed.add_field(name='킬뎃상위', value=soloSky2, inline=False)
-
-            soloWinRat1 = bsObj.find("div", {"class": "stats"})  # 박스
-            soloWinRat2 = soloWinRat1.find("div", {"class": "winratio stats-item stats-top-graph"})
-            soloWinRat3 = soloWinRat2.find("p", {"class": "value"})
-            soloWinRat = soloWinRat3.text.strip()  # -------승률---------
-            soloWinRatSky1 = soloWinRat2.find("span", {"class": "top"})
-            soloWinRatSky = soloWinRatSky1.text.strip()  # -------상위?%---------
-
-            print("승률 : " + soloWinRat)
-            print("승률상위 : " + soloWinRatSky)
-            print("")
-            embed.add_field(name='승률,승률상위', value=soloWinRat+" "+soloWinRatSky, inline=False)
-            #embed.add_field(name='승률상위', value=soloWinRatSky, inline=False)
-
-            soloHead1 = soloWinRat1.find("div", {"class": "headshots stats-item stats-top-graph"})
-            soloHead2 = soloHead1.find("p", {"class": "value"})
-            soloHead = soloHead2.text.strip()  # -------헤드샷---------
-            soloHeadSky1 = soloHead1.find("span", {"class": "top"})
-            soloHeadSky = soloHeadSky1.text.strip()  # # -------상위?%---------
-
-            print("헤드샷 : " + soloHead)
-            print("헤드샷상위 : " + soloHeadSky)
-            print("")
-            embed.add_field(name='헤드샷,헤드샷상위', value=soloHead+" "+soloHeadSky, inline=False)
-            #embed.add_field(name='헤드샷상위', value=soloHeadSky, inline=False)
-            await ctx.send(embed=embed)
-
+            await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
     @commands.command(name='배그듀오')
     async def _battleduo(self, ctx: commands.Context, *, location: str):
         enc_location = urllib.parse.quote(location)
@@ -222,8 +171,7 @@ class Main(commands.Cog):
 
         else:
             await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
-
-
+            
     @commands.command(name='배그스쿼드')
     async def _battlefour(self, ctx: commands.Context, *, location: str):
         enc_location = urllib.parse.quote(location)
