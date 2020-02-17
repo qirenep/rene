@@ -14,7 +14,6 @@ import youtube_dl
 import functools
 import itertools
 from classes.converters import Platform, Battletag
-import aiohttp
 from async_timeout import timeout
 from discord.ext import commands
 from openpyxl import load_workbook
@@ -22,21 +21,7 @@ from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
 from utilsmy.http import Fetch, PlayerNotFound
 from utilsmy.embed import Embeds, NoCompetitiveStats
-
 token = "YOUR-TOKEN"
-
-def splitmessage(s):
-    words = []
-    inword = 0
-    for c in s:
-        if c in " \r\n\t": #whitepsace
-            inword = 0
-        elif not inword:
-            words = words + [c]
-            inword = 1
-        else:
-            words[-1] = words[-1] + c
-    return words
 
 class Main(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -187,7 +172,6 @@ class Main(commands.Cog):
         duoRecord1 = duoCenter1.find("div", {"class": "overview"})
         duoRecord = duoRecord1.text.strip()  # ----기록이없습니다 문구----
         print(duoRecord)
-        channel = ctx.channel
         embed = discord.Embed(
             title='배그듀오 정보',
             description='배그듀오 정보입니다.',
