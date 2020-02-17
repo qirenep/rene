@@ -26,7 +26,46 @@ token = "YOUR-TOKEN"
 class Main(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-    
+    async def battle_else(self, ctx: commands.Context, duoRecord1, embed, duoCenter1):
+        duoRat1 = duoRecord1.find("span", {"class": "value"})
+        duoRat = duoRat1.text.strip()  # ----레이팅----
+        duoRank1 = duoRecord1.find("p", {"class": "grade-name"})
+        duoRank = duoRank1.text.strip()  # ----등급----
+        print(duoRank)
+        embed.add_field(name='레이팅', value=duoRat, inline=False)
+        embed.add_field(name='등급', value=duoRank, inline=False)
+
+
+        duoStat = duoCenter1.find("div", {"class": "stats"})
+
+        duoKD1 = duoStat.find("div", {"class": "kd stats-item stats-top-graph"})
+        duoKD2 = duoKD1.find("p", {"class": "value"})
+        duoKD = duoKD2.text.strip()  # ----킬뎃----
+        duoKdSky1 = duoStat.find("span", {"class": "top"})
+        duoKdSky = duoKdSky1.text.strip()  # ----킬뎃 상위?%----
+        print(duoKD)
+        print(duoKdSky)
+        embed.add_field(name='킬뎃,킬뎃상위', value=duoKD+" "+duoKdSky, inline=False)
+
+        duoWinRat1 = duoStat.find("div", {"class": "winratio stats-item stats-top-graph"})
+        duoWinRat2 = duoWinRat1.find("p", {"class": "value"})
+        duoWinRat = duoWinRat2.text.strip()  # ----승률----
+        duoWinRatSky1 = duoWinRat1.find("span", {"class": "top"})
+        duoWinRatSky = duoWinRatSky1.text.strip()  # ----승률 상위?%----
+        print(duoWinRat)
+        print(duoWinRatSky)
+        embed.add_field(name='승률,승률상위', value=duoWinRat + " " + duoWinRatSky, inline=False)
+
+        duoHead1 = duoStat.find("div", {"class": "headshots"})
+        duoHead2 = duoHead1.find("p", {"class": "value"})
+        duoHead = duoHead2.text.strip()  # ----헤드샷----
+        duoHeadSky1 = duoHead1.find("span", {"class": "top"})
+        duoHeadSky = duoHeadSky1.text.strip()  # ----헤드샷 상위?%----
+        print(duoHead)
+        print(duoHeadSky)
+        embed.add_field(name='헤드샷,헤드샷상위', value=duoHead + " " + duoHeadSky, inline=False)
+        await ctx.send(embed=embed)
+
     @commands.command(name='안녕')
     async def _hi(self, ctx: commands.Context):
         await ctx.send("hi")
@@ -182,44 +221,7 @@ class Main(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            duoRat1 = duoRecord1.find("span", {"class": "value"})
-            duoRat = duoRat1.text.strip()  # ----레이팅----
-            duoRank1 = duoRecord1.find("p", {"class": "grade-name"})
-            duoRank = duoRank1.text.strip()  # ----등급----
-            print(duoRank)
-            embed.add_field(name='레이팅', value=duoRat, inline=False)
-            embed.add_field(name='등급', value=duoRank, inline=False)
-
-
-            duoStat = duoCenter1.find("div", {"class": "stats"})
-
-            duoKD1 = duoStat.find("div", {"class": "kd stats-item stats-top-graph"})
-            duoKD2 = duoKD1.find("p", {"class": "value"})
-            duoKD = duoKD2.text.strip()  # ----킬뎃----
-            duoKdSky1 = duoStat.find("span", {"class": "top"})
-            duoKdSky = duoKdSky1.text.strip()  # ----킬뎃 상위?%----
-            print(duoKD)
-            print(duoKdSky)
-            embed.add_field(name='킬뎃,킬뎃상위', value=duoKD+" "+duoKdSky, inline=False)
-
-            duoWinRat1 = duoStat.find("div", {"class": "winratio stats-item stats-top-graph"})
-            duoWinRat2 = duoWinRat1.find("p", {"class": "value"})
-            duoWinRat = duoWinRat2.text.strip()  # ----승률----
-            duoWinRatSky1 = duoWinRat1.find("span", {"class": "top"})
-            duoWinRatSky = duoWinRatSky1.text.strip()  # ----승률 상위?%----
-            print(duoWinRat)
-            print(duoWinRatSky)
-            embed.add_field(name='승률,승률상위', value=duoWinRat + " " + duoWinRatSky, inline=False)
-
-            duoHead1 = duoStat.find("div", {"class": "headshots"})
-            duoHead2 = duoHead1.find("p", {"class": "value"})
-            duoHead = duoHead2.text.strip()  # ----헤드샷----
-            duoHeadSky1 = duoHead1.find("span", {"class": "top"})
-            duoHeadSky = duoHeadSky1.text.strip()  # ----헤드샷 상위?%----
-            print(duoHead)
-            print(duoHeadSky)
-            embed.add_field(name='헤드샷,헤드샷상위', value=duoHead + " " + duoHeadSky, inline=False)
-            await ctx.send(embed=embed)
+            await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
 
 
     @commands.command(name='배그스쿼드')
@@ -242,71 +244,7 @@ class Main(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            duoRat1 = duoRecord1.find("span", {"class": "value"})
-            duoRat = duoRat1.text.strip()  # ----레이팅----
-            duoRank1 = duoRecord1.find("p", {"class": "grade-name"})
-            duoRank = duoRank1.text.strip()  # ----등급----
-            print(duoRank)
-            embed.add_field(name='레이팅', value=duoRat, inline=False)
-            embed.add_field(name='등급', value=duoRank, inline=False)
-
-
-            duoStat = duoCenter1.find("div", {"class": "stats"})
-
-            duoKD1 = duoStat.find("div", {"class": "kd stats-item stats-top-graph"})
-            duoKD2 = duoKD1.find("p", {"class": "value"})
-            duoKD = duoKD2.text.strip()  # ----킬뎃----
-            duoKdSky1 = duoStat.find("span", {"class": "top"})
-            duoKdSky = duoKdSky1.text.strip()  # ----킬뎃 상위?%----
-            print(duoKD)
-            print(duoKdSky)
-            embed.add_field(name='킬뎃,킬뎃상위', value=duoKD+" "+duoKdSky, inline=False)
-
-            duoWinRat1 = duoStat.find("div", {"class": "winratio stats-item stats-top-graph"})
-            duoWinRat2 = duoWinRat1.find("p", {"class": "value"})
-            duoWinRat = duoWinRat2.text.strip()  # ----승률----
-            duoWinRatSky1 = duoWinRat1.find("span", {"class": "top"})
-            duoWinRatSky = duoWinRatSky1.text.strip()  # ----승률 상위?%----
-            print(duoWinRat)
-            print(duoWinRatSky)
-            embed.add_field(name='승률,승률상위', value=duoWinRat + " " + duoWinRatSky, inline=False)
-
-            duoHead1 = duoStat.find("div", {"class": "headshots"})
-            duoHead2 = duoHead1.find("p", {"class": "value"})
-            duoHead = duoHead2.text.strip()  # ----헤드샷----
-            duoHeadSky1 = duoHead1.find("span", {"class": "top"})
-            duoHeadSky = duoHeadSky1.text.strip()  # ----헤드샷 상위?%----
-            print(duoHead)
-            print(duoHeadSky)
-            embed.add_field(name='헤드샷,헤드샷상위', value=duoHead + " " + duoHeadSky, inline=False)
-            await ctx.send(embed=embed)
-
-        
-    @commands.command(name='실검')
-    async def _nowtxt(self, ctx: commands.Context):
-        url = "https://www.naver.com/"
-        html = urllib.request.urlopen(url)
-
-        bsObj = bs4.BeautifulSoup(html, "html.parser")
-        realTimeSerach1 = bsObj.find('div', {'class': 'ah_roll_area PM_CL_realtimeKeyword_rolling'})
-        realTimeSerach2 = realTimeSerach1.find('ul', {'class': 'ah_l'})
-        realTimeSerach3 = realTimeSerach2.find_all('li')
-
-
-        embed = discord.Embed(
-            title='네이버 실시간 검색어',
-            description='실시간검색어',
-            colour=discord.Colour.green()
-        )
-        for i in range(0,20):
-            realTimeSerach4 = realTimeSerach3[i]
-            realTimeSerach5 = realTimeSerach4.find('span', {'class': 'ah_k'})
-            realTimeSerach = realTimeSerach5.text.replace(' ', '')
-            realURL = 'https://search.naver.com/search.naver?ie=utf8&query='+realTimeSerach
-            print(realTimeSerach)
-            embed.add_field(name=str(i+1)+'위', value='\n'+'[%s](<%s>)' % (realTimeSerach, realURL), inline=False) # [텍스트](<링크>) 형식으로 적으면 텍스트 하이퍼링크 만들어집니다
-
-        await ctx.send(embed=embed)
+            await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
         
     @commands.command(name='급식')
     async def _food(self, ctx: commands.Context, *, location1: str):
