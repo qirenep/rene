@@ -65,24 +65,6 @@ class Main(commands.Cog):
         print(duoHeadSky)
         embed.add_field(name='헤드샷,헤드샷상위', value=duoHead + " " + duoHeadSky, inline=False)
         await ctx.send(embed=embed)
-    async def print_get_meal(self, ctx: commands.Context, local_date, local_weekday, message):
-        l_diet = get_diet(2, local_date, local_weekday)
-        d_diet = get_diet(3, local_date, local_weekday)
-
-        if len(l_diet) == 1:
-            embed = discord.Embed(title="No Meal", description="급식이 없습니다.", color=0x00ff00)
-            await ctx.send(embed=embed)
-        elif len(d_diet) == 1:
-            lunch = local_date + " 중식\n" + l_diet
-            embed = discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
-            await ctx.send(embed=embed)
-        else:
-            lunch = local_date + " 중식\n" + l_diet
-            dinner = local_date + " 석식\n" + d_diet
-            embed= discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
-            await ctx.send(embed=embed)
-            embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
-            await ctx.send(embed=embed)
     async def get_diet(self, ctx: commands.Context, code, ymd, weekday, lc):
         schMmealScCode = code #int 1조식2중식3석식
         schYmd = ymd #str 요청할 날짜 yyyy.mm.dd
@@ -121,8 +103,27 @@ class Main(commands.Cog):
             except:
                 element = " " # 공백 반환
         return element
+
+    async def print_get_meal(self, ctx: commands.Context, local_date, local_weekday, message):
+        l_diet = get_diet(2, local_date, local_weekday)
+        d_diet = get_diet(3, local_date, local_weekday)
+
+        if len(l_diet) == 1:
+            embed = discord.Embed(title="No Meal", description="급식이 없습니다.", color=0x00ff00)
+            await ctx.send(embed=embed)
+        elif len(d_diet) == 1:
+            lunch = local_date + " 중식\n" + l_diet
+            embed = discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
+            await ctx.send(embed=embed)
+        else:
+            lunch = local_date + " 중식\n" + l_diet
+            dinner = local_date + " 석식\n" + d_diet
+            embed= discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
+            await ctx.send(embed=embed)
+            embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
+            await ctx.send(embed=embed)
                     
-    def pred(m):
+    def pred(self, ctx: commands.Context, m):
         return m.author == ctx.author and m.channel == ctx.channel
     @commands.command(name='안녕')
     async def _hi(self, ctx: commands.Context):
@@ -334,7 +335,7 @@ class Main(commands.Cog):
                 await ctx.send(embed=warnning)
                 return
 
-            await print_get_meal(meal_date, whatday, ctx)
+            await print_get_meal(meal_date, whatday, ctx, lc=lc)
         if __name__ == '__pred__':
             pred(m)
     @commands.command(name='영화순위')
