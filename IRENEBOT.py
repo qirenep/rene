@@ -65,67 +65,7 @@ class Main(commands.Cog):
         print(duoHeadSky)
         embed.add_field(name='헤드샷,헤드샷상위', value=duoHead + " " + duoHeadSky, inline=False)
         await ctx.send(embed=embed)
-    def get_diet(self, ctx: commands.Context, code, ymd, weekday, lc):
-        lc = lc
-        schMmealScCode = code #int 1조식2중식3석식
-        schYmd = ymd #str 요청할 날짜 yyyy.mm.dd
-        if weekday == 5 or weekday == 6: #토요일,일요일 버림
-            element = " " #공백 반환
-        else:
-            num = weekday + 1 #int 요청할 날짜의 요일 0월1화2수3목4금5토6일 파싱한 데이터의 배열이 일요일부터 시작되므로 1을 더해줍니다.
-            URL = "http://stu." + lc + ".go.kr/sts_sci_md01_001.do?" + "schulCode=" + schoolcode1 + "&schulCrseScCode=4" + "&schulKndScCode=04" + "&schMmealScCode=%d&schYmd=%s" % (schMmealScCode, schYmd)
-    
-                    #http://stu.AAA.go.kr/ 관할 교육청 주소 확인해주세요.
-                    #schulCode= 학교고유코드
-                    #schulCrseScCode= 1유치원2초등학교3중학교4고등학교
-                    #schulKndScCode= 01유치원02초등학교03중학교04고등학교
 
-                    #기존 get_html 함수부분을 옮겨왔습니다.
-            html = ""
-            resp = requests.get(URL)
-            if resp.status_code == 200 : #사이트가 정상적으로 응답할 경우
-                html = resp.text
-            soup = BeautifulSoup(html, 'html.parser')
-            element_data = soup.find_all("tr")
-            element_data = element_data[2].find_all('td')
-            try:
-                element = str(element_data[num])
-
-                        #filter
-                element_filter = ['[', ']', '<td class="textC last">', '<td class="textC">', '</td>', '&amp;', '(h)', '.']
-                for element_string in element_filter :
-                    element = element.replace(element_string, '')
-                        #줄 바꿈 처리
-                element = element.replace('<br/>', '\n')
-                        #모든 공백 삭제
-                element = re.sub(r"\d", "", element)
-
-                    #급식이 없을 경우
-            except:
-                element = " " # 공백 반환
-        return element
-
-    async def print_get_meal(self, ctx: commands.Context, local_date, local_weekday, message):
-        l_diet = get_diet(2, local_date, local_weekday)
-        d_diet = get_diet(3, local_date, local_weekday)
-
-        if len(l_diet) == 1:
-            embed = discord.Embed(title="No Meal", description="급식이 없습니다.", color=0x00ff00)
-            await ctx.send(embed=embed)
-        elif len(d_diet) == 1:
-            lunch = local_date + " 중식\n" + l_diet
-            embed = discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
-            await ctx.send(embed=embed)
-        else:
-            lunch = local_date + " 중식\n" + l_diet
-            dinner = local_date + " 석식\n" + d_diet
-            embed= discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
-            await ctx.send(embed=embed)
-            embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
-            await ctx.send(embed=embed)
-                    
-    def pred(ctx: commands.Context, m):
-        return m.author == ctx.author and m.channel == ctx.channel
     @commands.command(name='안녕')
     async def _hi(self, ctx: commands.Context):
         await ctx.send("hi")
@@ -210,7 +150,6 @@ class Main(commands.Cog):
 
         else:
             await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
-
     @commands.command(name='배그듀오')
     async def _battleduo(self, ctx: commands.Context, *, location: str):
         enc_location = urllib.parse.quote(location)
@@ -232,8 +171,7 @@ class Main(commands.Cog):
 
         else:
             await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
-
-
+            
     @commands.command(name='배그스쿼드')
     async def _battlefour(self, ctx: commands.Context, *, location: str):
         enc_location = urllib.parse.quote(location)
@@ -255,32 +193,6 @@ class Main(commands.Cog):
 
         else:
             await self.battle_else(ctx=ctx, duoRecord1=duoRecord1, embed=embed, duoCenter1=duoCenter1)
-        
-    @commands.command(name='실검')
-    async def _nowtxt(self, ctx: commands.Context):
-        url = "https://www.naver.com/"
-        html = urllib.request.urlopen(url)
-
-        bsObj = bs4.BeautifulSoup(html, "html.parser")
-        realTimeSerach1 = bsObj.find('div', {'class': 'ah_roll_area PM_CL_realtimeKeyword_rolling'})
-        realTimeSerach2 = realTimeSerach1.find('ul', {'class': 'ah_l'})
-        realTimeSerach3 = realTimeSerach2.find_all('li')
-
-
-        embed = discord.Embed(
-            title='네이버 실시간 검색어',
-            description='실시간검색어',
-            colour=discord.Colour.green()
-        )
-        for i in range(0,20):
-            realTimeSerach4 = realTimeSerach3[i]
-            realTimeSerach5 = realTimeSerach4.find('span', {'class': 'ah_k'})
-            realTimeSerach = realTimeSerach5.text.replace(' ', '')
-            realURL = 'https://search.naver.com/search.naver?ie=utf8&query='+realTimeSerach
-            print(realTimeSerach)
-            embed.add_field(name=str(i+1)+'위', value='\n'+'[%s](<%s>)' % (realTimeSerach, realURL), inline=False) # [텍스트](<링크>) 형식으로 적으면 텍스트 하이퍼링크 만들어집니다
-
-        await ctx.send(embed=embed)
         
     @commands.command(name='급식')
     async def _food(self, ctx: commands.Context, *, location1: str):
@@ -311,12 +223,73 @@ class Main(commands.Cog):
         request_e = discord.Embed(title="Send to Me", description=request, color=0xcceeff)
         print(schoolcode1)
         await ctx.send(embed=request_e)
+        def get_diet(code, ymd, weekday):
+                schMmealScCode = code #int 1조식2중식3석식
+                schYmd = ymd #str 요청할 날짜 yyyy.mm.dd
+                if weekday == 5 or weekday == 6: #토요일,일요일 버림
+                    element = " " #공백 반환
+                else:
+                    num = weekday + 1 #int 요청할 날짜의 요일 0월1화2수3목4금5토6일 파싱한 데이터의 배열이 일요일부터 시작되므로 1을 더해줍니다.
+                    URL = "http://stu." + lc + ".go.kr/sts_sci_md01_001.do?" + "schulCode=" + schoolcode1 + "&schulCrseScCode=4" + "&schulKndScCode=04" + "&schMmealScCode=%d&schYmd=%s" % (schMmealScCode, schYmd)
+    
+                    #http://stu.AAA.go.kr/ 관할 교육청 주소 확인해주세요.
+                    #schulCode= 학교고유코드
+                    #schulCrseScCode= 1유치원2초등학교3중학교4고등학교
+                    #schulKndScCode= 01유치원02초등학교03중학교04고등학교
+
+                    #기존 get_html 함수부분을 옮겨왔습니다.
+                    html = ""
+                    resp = requests.get(URL)
+                    if resp.status_code == 200 : #사이트가 정상적으로 응답할 경우
+                        html = resp.text
+                    soup = BeautifulSoup(html, 'html.parser')
+                    element_data = soup.find_all("tr")
+                    element_data = element_data[2].find_all('td')
+                    try:
+                        element = str(element_data[num])
+
+                        #filter
+                        element_filter = ['[', ']', '<td class="textC last">', '<td class="textC">', '</td>', '&amp;', '(h)', '.']
+                        for element_string in element_filter :
+                            element = element.replace(element_string, '')
+                        #줄 바꿈 처리
+                        element = element.replace('<br/>', '\n')
+                        #모든 공백 삭제
+                        element = re.sub(r"\d", "", element)
+
+                    #급식이 없을 경우
+                    except:
+                        element = " " # 공백 반환
+                return element
+
+        async def print_get_meal(local_date, local_weekday, message):
+            l_diet = get_diet(2, local_date, local_weekday)
+            d_diet = get_diet(3, local_date, local_weekday)
+
+            if len(l_diet) == 1:
+                embed = discord.Embed(title="No Meal", description="급식이 없습니다.", color=0x00ff00)
+                await ctx.send(embed=embed)
+            elif len(d_diet) == 1:
+                lunch = local_date + " 중식\n" + l_diet
+                embed = discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
+                await ctx.send(embed=embed)
+            else:
+                lunch = local_date + " 중식\n" + l_diet
+                dinner = local_date + " 석식\n" + d_diet
+                embed= discord.Embed(title="Lunch", description=lunch, color=0x00ff00)
+                await ctx.send(embed=embed)
+                embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
+                await ctx.send(embed=embed)
+
+                    
+        def pred(m):
+            return m.author == ctx.author and m.channel == ctx.channel
         try:
             meal_date = await bot.wait_for('message', check=pred, timeout=15.0)
                 #입력이 없을 경우
         except asyncio.TimeoutError:
             longtimemsg = discord.Embed(title="In 15sec", description='15초내로 입력해주세요. 다시시도 : $g', color=0xff0000)
-            await ctx.send(embed=longtimemsg)
+            await message.channel.send(embed=longtimemsg)
             return
         else:
             meal_date = str(meal_date.content) # 171121
@@ -336,7 +309,7 @@ class Main(commands.Cog):
                 await ctx.send(embed=warnning)
                 return
 
-            await print_get_meal(meal_date, whatday, ctx, lc=lc)
+            await print_get_meal(meal_date, whatday, ctx)
         if __name__ == '__pred__':
             pred(m)
     @commands.command(name='영화순위')
