@@ -65,7 +65,8 @@ class Main(commands.Cog):
         print(duoHeadSky)
         embed.add_field(name='헤드샷,헤드샷상위', value=duoHead + " " + duoHeadSky, inline=False)
         await ctx.send(embed=embed)
-    async def get_diet(self, ctx: commands.Context, code, ymd, weekday, lc):
+    def get_diet(self, ctx: commands.Context, code, ymd, weekday, lc):
+        lc = lc
         schMmealScCode = code #int 1조식2중식3석식
         schYmd = ymd #str 요청할 날짜 yyyy.mm.dd
         if weekday == 5 or weekday == 6: #토요일,일요일 버림
@@ -123,7 +124,7 @@ class Main(commands.Cog):
             embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
             await ctx.send(embed=embed)
                     
-    def pred(self, ctx: commands.Context, m):
+    def pred(ctx: commands.Context, m):
         return m.author == ctx.author and m.channel == ctx.channel
     @commands.command(name='안녕')
     async def _hi(self, ctx: commands.Context):
