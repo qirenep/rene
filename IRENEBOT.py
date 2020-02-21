@@ -47,7 +47,7 @@ class Main(commands.Cog):
             embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
             await ctx.send(embed=embed)
 
-    def get_diet(self, code, ymd, weekday, lc, schoolcode1):
+    def get_diet(code, ymd, weekday, lc, schoolcode1):
             lc = lc
             schMmealScCode = code #int 1조식2중식3석식
             schYmd = ymd #str 요청할 날짜 yyyy.mm.dd
@@ -85,7 +85,8 @@ class Main(commands.Cog):
                 #급식이 없을 경우
                 except:
                     element = " " # 공백 반환
-            return element   
+            return element
+        
     async def battle_else(self, ctx: commands.Context, duoRecord1, embed, duoCenter1):
         duoRat1 = duoRecord1.find("span", {"class": "value"})
         duoRat = duoRat1.text.strip()  # ----레이팅----
@@ -306,6 +307,7 @@ class Main(commands.Cog):
             ss = "datetime.datetime(" + s + ").weekday()"
             try:
                 whatday = eval(ss)
+                return ss
             except:
                 warnning = discord.Embed(title="Plz Retry", description='올바른 값으로 다시 시도하세요 : $g', color=0xff0000)
                 await ctx.send(embed=warnning)
@@ -383,7 +385,8 @@ class Main(commands.Cog):
 
         # lyric's sentences sheet
         line_list = [] # index for sentence's line
-        sentence_data_list = [] # list for sentence data 
+        
+        sentence_data_list = [] # list for sentence data
         lyrics_sentence_trackId_list = [] # list for sentence's track identifier
 
         # pattern that I wanna replace
@@ -394,6 +397,7 @@ class Main(commands.Cog):
         def remove_tags(lyrics):
             # replace pattern that I defined above
             lyrics = pattern.sub(lambda m: rep[re.escape(m.group(0))], lyrics)
+            
             # remove [text] and <text>    
             lyrics = re.sub("[\<\[].*?[\>\]]", "", lyrics)
             return lyrics
@@ -463,17 +467,20 @@ class Main(commands.Cog):
             '''
             # remove row in lyric has alphabet. use this code if you wanna pure korean lyrics
             # 영어로 된 문장 혹은 알파벳이 포함된 문장 전체를 제거합니다. 순수한글로만 이루어진 가사만 얻고 싶을때 사용합시다.
-            lyrics_sentence_list = list(filter(lambda w: not re.match(r'[a-zA-Z]+', w), lyrics_sentence_list)) 
+            
+            lyrics_sentence_list = list(filter(lambda w: not re.match(r'[a-zA-Z]+', w), lyrics_sentence_list))
             '''
 
             '''
             # remove only english from row of lyric consist of kor and eng.
-            # 한영 혼용 문장에서 오직 영어만을 제거합니다. (한글 부분은 남습니다.) 
+            # 한영 혼용 문장에서 오직 영어만을 제거합니다. (한글 부분은 남습니다.)
+            
             lyrics_sentence_list = [re.sub(r'[a-zA-Z]', '', lyrics) for lyrics in lyrics_sentence_list]
             '''
-
-            # remove blank 
-            lyrics_sentence_list = list(filter(lambda a : a != '', lyrics_sentence_list))   
+            
+            # remove blank
+            
+            lyrics_sentence_list = list(filter(lambda a : a != '', lyrics_sentence_list))
             lyrics_sentence_list = list(filter(lambda a : a.isspace() != True, lyrics_sentence_list)) 
             lyrics_sentence_list = [re.sub(' +', ' ', ly) for ly in lyrics_sentence_list]
             lyrics_sentence_list = [ly.strip() for ly in lyrics_sentence_list]
@@ -659,7 +666,7 @@ class Main(commands.Cog):
                     await ctx.author.send('%s의 %s / 유사한 문장: %s' % (r[0], r[1], r[3]))
         except KeyError:
             sys.exit(1)
-
+ 
 class Statistics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
