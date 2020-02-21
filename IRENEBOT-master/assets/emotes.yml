@@ -1,0 +1,24 @@
+stats:
+  game: "<:game:679392853872476174>"
+  assists: "<:assist:679392815322628116>"
+  best: "<:best:679392839943061523>"
+  combat: "<:combat:679392846691696650>"
+  average: "<:average:679392803771514910>"
+  awards: "<:awards:679392833462861846>"
+
+awards:
+    - ":flower_playing_cards:"
+    - "<:medals:633342115614687242>"
+    - "<:medal_bronze:633129629992878106>"
+    - "<:medal_silver:633129658241646632>"
+    - "<:medal_gold:633129666969993226>"
+
+icons:
+  roles:
+    - "<:tank:645784573141319722>"
+    - "<:damage:645784543093325824>"
+    - "<:support:645784563322191902>"
+  
+  rank:
+    sr: "<:sr:639897739920146437>"
+    nes: ":no_entry_sign:"

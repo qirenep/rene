@@ -1,0 +1,10 @@
+CREATE TABLE prefixes (
+    id INTEGER PRIMARY KEY,
+    prefix TEXT NOT NULL
+);
+
+CREATE TABLE profiles (
+    id INTEGER PRIMARY KEY,
+    platform TEXT NOT NULL,
+    name TEXT NOT NULL
+);
