@@ -47,8 +47,9 @@ class Main(commands.Cog):
             embed = discord.Embed(title="Dinner", description=dinner, color=0x00ff00)
             await ctx.send(embed=embed)
 
-    def get_diet(code, ymd, weekday, lc, schoolcode1):
+    def get_diet(self, code, ymd, weekday, lc, schoolcode1):
             lc = lc
+            schoolcode1 = schoolcode1
             schMmealScCode = code #int 1조식2중식3석식
             schYmd = ymd #str 요청할 날짜 yyyy.mm.dd
             if weekday == 5 or weekday == 6: #토요일,일요일 버림
@@ -296,18 +297,13 @@ class Main(commands.Cog):
             return
         else:
             meal_date = str(meal_date.content) # 171121
-            meal_date = '20' + meal_date[:2] + '.' + meal_date[2:4] + '.' + meal_date[4:6] # 2017.11.21
-            print(meal_date)
-            s = meal_date.replace('.', ', ') # 2017, 11, 21
-
-                #한자리수 달인 경우를 해결하기위함
-            if int(s[6:8]) < 10:
-                s = s.replace(s[6:8], s[7:8])
-
-            ss = "datetime.datetime(" + s + ").weekday()"
+            meal_date = '20' + meal_date # 2017.11.21
+            s1 = int(meal_date[:4])
+            s2 = int(meal_date[4:6])
+            s3 = int(meal_date[6:8])
+            
             try:
-                whatday = eval(ss)
-                return ss
+                whatday = datetime.datetime(s1, s2, s3).weekday()
             except:
                 warnning = discord.Embed(title="Plz Retry", description='올바른 값으로 다시 시도하세요 : $g', color=0xff0000)
                 await ctx.send(embed=warnning)
