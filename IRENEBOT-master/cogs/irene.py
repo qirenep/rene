@@ -15,8 +15,6 @@ import functools
 import itertools
 import datetime
 import platform
-import psutil
-import distro
 import aiohttp
 import config
 from async_timeout import timeout
