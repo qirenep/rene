@@ -1,4 +1,3 @@
-import aiosqlite
 import textwrap
 
 import discord
@@ -18,24 +17,12 @@ class Events(commands.Cog):
             -----------------
             Connection established.
             Logged in as {self.bot.user.display_name} - {self.bot.user.id}
-            Created by: {self.bot.config.owner}
             Using discord.py {discord.__version__}
             Running {self.bot.user.display_name} {self.bot.version} in {len(self.bot.guilds)} guilds
             -----------------
             """
         ))
         await self.change_presence()
-
-        profile = """
-        CREATE TABLE IF NOT EXISTS profiles (
-            id INTEGER PRIMARY KEY,
-            platform TEXT NOT NULL,
-            name TEXT NOT NULL
-        );
-        """
-        async with aiosqlite.connect("main.sqlite") as conn:
-            await conn.execute(profile)
-            await conn.commit()
 
     async def change_presence(self):
         await self.bot.wait_until_ready()
@@ -68,9 +55,7 @@ class Events(commands.Cog):
             name="Get started",
             value="""
             To get started type `-help` or `@OverBot help`.
-
             Default prefix is `-` or you can mention the bot.
-
             You can change it by using `-settings` command and following the instructions.
             """,
             inline=False
