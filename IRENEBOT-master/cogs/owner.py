@@ -1,5 +1,6 @@
-import textwrap
+import aiosqlite
 import traceback
+import textwrap
 import copy
 import io
 
@@ -8,7 +9,7 @@ import discord
 from contextlib import redirect_stdout
 from discord.ext import commands
 
-from utilsmy.database import select_all, remove_duplicates
+from utilsmy.database import select_all
 from utilsmy.embed import exception
 
 
@@ -28,8 +29,8 @@ class Owner(commands.Cog):
     async def load(self, ctx, *, cog: str):
         """
         [Owner Only] Loads a module.
-        Use cogs.cog_name as cog parameter.
-        """
+        Use cogs.cog_name as cog parameter."""
+
         try:
             self.bot.load_extension(cog)
         except Exception as ex:
@@ -47,7 +48,10 @@ class Owner(commands.Cog):
     @commands.command(aliases=["uld"], hidden=True)
     @commands.is_owner()
     async def unload(self, ctx, *, cog: str):
-        """[Owner Only] Unloads a module."""
+        """
+        [Owner Only] Unloads a module.
+        Use cogs.cog_name as cog parameter."""
+
         try:
             self.bot.unload_extension(cog)
         except Exception as ex:
@@ -65,7 +69,10 @@ class Owner(commands.Cog):
     @commands.command(name="reload", aliases=["rld"], hidden=True)
     @commands.is_owner()
     async def _reload(self, ctx, *, cog: str):
-        """[Owner Only] Reloads a module. Use cogs.cog_name as cog parameter."""
+        """
+        [Owner Only] Reloads a module.
+        Use cogs.cog_name as cog parameter."""
+
         try:
             self.bot.reload_extension(cog)
         except Exception as ex:
@@ -167,9 +174,30 @@ Commands used :: {self.bot.commands_used}
         except Exception as ex:
             await ctx.send(ex)
 
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def sql(self, ctx, *, query: str):
+        """[Owner Only] Run a query."""
+        async with aiosqlite.connect("main.sqlite") as conn:
+            try:
+                async with conn.execute(query) as pool:
+                    rows = await pool.fetchall()
+            except Exception as ex:
+                return await ctx.send(f"```py\n{ex}```")
+            if rows:
+                await ctx.send(f"""
+```asciidoc
+Successful query
+----------------
+{rows}
+```""")
+            else:
+                await ctx.send("There are no rows.")
+
     @commands.command()
     @commands.is_owner()
     async def prefixes(self, ctx):
+        """[Owner Only] Returns prefixes table."""
         async with ctx.typing():
             pages = []
             rows = await select_all("prefixes")
@@ -190,10 +218,11 @@ Commands used :: {self.bot.commands_used}
     @commands.command()
     @commands.is_owner()
     async def profiles(self, ctx):
+        """[Owner Only] Returns profiles table."""
         async with ctx.typing():
             pages = []
             rows = await select_all("profiles")
-            x = list(chunks(rows, 10))
+            x = list(chunks(rows, 12))
             for i, k in enumerate(x):
                 embed = discord.Embed(
                     title=f"Profiles ({i+1}/{len(x)})",
@@ -203,26 +232,10 @@ Commands used :: {self.bot.commands_used}
                 embed.set_footer(text=f"{len(rows)} profiles")
                 for row in k:
                     user_id, platform, name = row
-                    embed.add_field(name="User ID", value=user_id)
-                    embed.add_field(name="Platform", value=platform)
-                    embed.add_field(name="Name", value=name)
-                    if len(k) < 10:
-                        return await ctx.send(embed=embed)
+                    embed.add_field(
+                        name=user_id, value=f"{name} | {platform}")
                 pages.append(embed)
             await self.bot.paginator.Paginator(extras=pages).paginate(ctx)
-
-    @commands.command()
-    @commands.is_owner()
-    async def duplicates(self, ctx):
-        try:
-            await remove_duplicates()
-            await ctx.send("""
-```diff
-+ Duplicates have been successfully removed.
-```""")
-        except Exception as ex:
-            embed = exception(ex)
-            await ctx.send(embed=embed)
 
 
 def setup(bot):
