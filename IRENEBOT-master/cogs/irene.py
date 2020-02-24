@@ -19,15 +19,12 @@ import psutil
 import distro
 import aiohttp
 import config
-from classes.converters import Platform, Battletag
 from async_timeout import timeout
 from discord.ext import commands
 from openpyxl import load_workbook
 from urllib.request import urlopen, Request
 from bs4 import BeautifulSoup
-from utilsmy.http1 import Fetch, PlayerNotFound
-from utilsmy.embed import Embeds, NoCompetitiveStats, exception
-from utilsmy import paginator
+
 
 
 class Main(commands.Cog):
