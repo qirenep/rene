@@ -153,7 +153,7 @@ class Various(commands.Cog):
             )
             embed.add_field(
                 name="Patch Notes",
-                value="[Click here to view all the patch notes](https://playoverwatch.com/en-us/news/patch-notes/pc)"
+                value="[Click here to view all the patch notes](https://playoverwatch.com/ko-kr/news/patch-notes/pc)"
             )
             await ctx.send(embed=embed)
 

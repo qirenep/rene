@@ -106,5 +106,3 @@ class Log(commands.Cog):
         await ch.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Log(bot))

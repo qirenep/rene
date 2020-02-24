@@ -45,12 +45,11 @@ class Stats(commands.Cog):
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def rank(self, ctx, platform: Platform, *, name: Battletag):
         """
-        Returns player rank.
-        Platform must be: pc, psn or xbl.
-        Name must be a battletag if paltform is pc else type your console online id.
-        E.g. -rank pc battletag (pc)
-        E.g. -rank psn name (psn or xbl)
-        Note: name and battletag are case sensitive.
+        플레이어의 경쟁전 점수를 보여줍니다.
+        지원하는 플랫폼은 다음과 같습니다.: pc, psn or xbl.
+        명령어는 아래와 같습니다.
+        E.g. rrank pc battletag (pc)
+        E.g. rrank psn name (psn or xbl)
         """
         async with ctx.typing():
             await self.embed_stats(ctx, platform, name)
@@ -59,7 +58,7 @@ class Stats(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def awards(self, ctx, platform: Platform, *, name: Battletag):
-        """Returns player awards."""
+        """플레이어의 메달 갯수를 보여줍니다."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, name)
 
@@ -67,7 +66,7 @@ class Stats(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def quickplay(self, ctx, platform: Platform, *, name: Battletag):
-        """Returns player quickplay stats."""
+        """빠른 대전 통계를 보여줍니다."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, name)
 
@@ -75,7 +74,7 @@ class Stats(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def competitive(self, ctx, platform: Platform, *, name: Battletag):
-        """Returns player competitive stats."""
+        """경쟁전 통계를 보여줍니다."""
         async with ctx.typing():
             await self.embed_stats(ctx, platform, name)
 
